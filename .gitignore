@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# WhatsApp Web auth session (contains login credentials — never commit)
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Secrets
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

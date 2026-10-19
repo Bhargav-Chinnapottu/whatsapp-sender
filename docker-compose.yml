@@ -1,0 +1,22 @@
+services:
+  whatsapp-sender:
+    build: .
+    image: whatsapp-sender:latest
+    container_name: whatsapp-sender
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Set a strong password to protect the public URL. Read from your shell
+      # or a .env file sitting next to this compose file.
+      APP_USER: "${APP_USER:-admin}"
+      APP_PASSWORD: "${APP_PASSWORD:?Set APP_PASSWORD in .env before deploying publicly}"
+      PORT: "3000"
+    volumes:
+      # Persist the WhatsApp login session across restarts/redeploys.
+      - wa_auth:/app/.wwebjs_auth
+    # Chromium can use a fair bit of shared memory; bump the default 64MB.
+    shm_size: "1gb"
+
+volumes:
+  wa_auth:

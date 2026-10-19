@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Contact Sender</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>WhatsApp Contact Sender</h1>
+      <p class="subtitle">Upload an Excel of contacts and send personalized messages.</p>
+    </header>
+
+    <!-- Step 1: Add contacts -->
+    <section class="card" aria-labelledby="step1-title">
+      <h2 id="step1-title"><span class="step-num">1</span> Add contacts</h2>
+
+      <div class="mode-toggle" role="tablist" aria-label="Contact input mode">
+        <button type="button" id="modeExcelBtn" class="mode-btn active" role="tab" aria-selected="true">Upload Excel</button>
+        <button type="button" id="modeManualBtn" class="mode-btn" role="tab" aria-selected="false">Enter manually</button>
+      </div>
+
+      <!-- Mode A: Excel upload -->
+      <div id="excelMode">
+        <p class="hint">Excel file (.xlsx / .xls) with <strong>leadname</strong> and <strong>mobile</strong> columns.
+          Indian numbers only — a plain 10-digit mobile works (e.g. <code>98765 43210</code>); the
+          <code>91</code> country code is added automatically.</p>
+        <label class="file-input">
+          <input type="file" id="fileInput" accept=".xlsx,.xls" aria-describedby="uploadStatus" />
+          <span>Choose Excel file</span>
+        </label>
+        <p id="uploadStatus" class="status" role="status" aria-live="polite"></p>
+      </div>
+
+      <!-- Mode B: Manual entry -->
+      <div id="manualMode" hidden>
+        <p class="hint">One contact per line as <code>Name, Number</code> — or just a number.
+          Indian numbers only; the <code>91</code> code is added automatically.</p>
+        <textarea id="manualInput" rows="6"
+          placeholder="Asha, 9876543210&#10;Ravi Kumar, 98765 43211&#10;9876543212"></textarea>
+        <button type="button" id="manualParseBtn" class="btn">Add these contacts</button>
+        <p id="manualStatus" class="status" role="status" aria-live="polite"></p>
+      </div>
+
+      <div id="previewWrap" hidden>
+        <div class="counts">
+          <span id="countTotal" class="badge"></span>
+          <span id="countValid" class="badge badge-ok"></span>
+          <span id="countInvalid" class="badge badge-warn"></span>
+        </div>
+        <div class="table-scroll">
+          <table id="previewTable">
+            <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Status</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Compose -->
+    <section class="card" aria-labelledby="step2-title">
+      <h2 id="step2-title"><span class="step-num">2</span> Compose message</h2>
+      <p class="hint">Use <code>{name}</code> to insert each contact's name.</p>
+      <textarea id="messageInput" rows="5" placeholder="Hi {name}, just reaching out to say..."></textarea>
+      <div class="delay-row">
+        <label>Delay between messages:
+          <input type="number" id="minDelay" value="3" min="0" step="1" /> to
+          <input type="number" id="maxDelay" value="8" min="0" step="1" /> seconds
+        </label>
+      </div>
+      <p class="hint small">A randomized delay reduces the risk of your number being flagged.</p>
+    </section>
+
+    <!-- Step 3: Connect -->
+    <section class="card" aria-labelledby="step3-title">
+      <h2 id="step3-title"><span class="step-num">3</span> Connect WhatsApp</h2>
+      <p class="hint">Click connect, then scan the QR code in WhatsApp →
+        <em>Settings → Linked Devices → Link a Device</em>.</p>
+      <button id="connectBtn" class="btn">Connect WhatsApp</button>
+      <div id="waStatus" class="wa-status" role="status" aria-live="polite">Not connected</div>
+      <div id="qrWrap" class="qr-wrap" hidden>
+        <img id="qrImg" alt="WhatsApp QR code — scan with your phone" />
+      </div>
+    </section>
+
+    <!-- Step 4: Send -->
+    <section class="card" aria-labelledby="step4-title">
+      <h2 id="step4-title"><span class="step-num">4</span> Send</h2>
+      <button id="sendBtn" class="btn btn-primary" disabled>Send messages</button>
+      <div class="progress-wrap" hidden id="progressWrap">
+        <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+        <p id="progressText" class="status" aria-live="polite"></p>
+      </div>
+      <div class="log-scroll"><ul id="log" class="log"></ul></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
